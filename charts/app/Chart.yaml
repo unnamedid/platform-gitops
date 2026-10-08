@@ -1,0 +1,6 @@
+apiVersion: v2
+name: app
+description: The platform's golden chart - the one supported way to run a stateless HTTP service
+type: application
+version: 0.1.0
+appVersion: "0"

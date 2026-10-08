@@ -1,0 +1,11 @@
+# Chart defaults. Services override these in services/<name>/values*.yaml.
+name: ""
+owner: ""
+image:
+  repository: ""
+  tag: ""
+  pullPolicy: IfNotPresent
+replicas: 1
+port: 8080
+env: {}
+resources: {}

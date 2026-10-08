@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-api
+  namespace: hello-api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      # label key: value  (must match template.metadata.labels below)
+      app: hello-api
+  template:
+    metadata:
+      labels:
+        # label key: value  (must match selector above AND service.yaml selector)
+        app: hello-api
+    spec:
+      containers:
+        - name: hello-api
+          image: hello-api:v1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 8080
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8080

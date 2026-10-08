@@ -1,0 +1,7 @@
+# Settings every environment shares. values-<env>.yaml layers on top.
+name: hello-api
+owner: backend-team
+image:
+  repository: hello-api
+  tag: v1
+port: 8080

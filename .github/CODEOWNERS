@@ -1,0 +1,2 @@
+# Who must approve changes to what. GitHub enforces this once branch protection requires code-owner review.
+/charts/ @__GH_USER__
