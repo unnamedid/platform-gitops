@@ -8,4 +8,6 @@ image:
 replicas: 1
 port: 8080
 env: {}
-resources: {}
+resources:
+  requests: {cpu: 100m, memory: 64Mi}
+  limits: {memory: 128Mi}

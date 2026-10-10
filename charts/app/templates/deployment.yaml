@@ -14,6 +14,13 @@ spec:
       labels:
         {{- include "app.labels" . | nindent 8 }}
     spec:
+      serviceAccountName: {{ include "app.name" . }}
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65532
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: {{ include "app.name" . }}
           image: "{{ .Values.image.repository }}:{{ required "values.image.tag is required" .Values.image.tag }}"
@@ -21,7 +28,24 @@ spec:
           ports:
             - name: http
               containerPort: {{ .Values.port }}
-          # TODO(ch06): pass .Values.env to the container as environment variables
-          # TODO(ch06): security: run non-root, read-only root filesystem, no privilege escalation,
-          #             drop all capabilities, seccomp RuntimeDefault; do not mount the API token
-          # TODO(ch06): reliability: resource requests/limits, readiness and liveness probes on /healthz
+          env:
+          {{- range $key, $value := .Values.env }}
+            - name: {{ $key }}
+              value: {{ $value | quote }}
+          {{- end }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: {{ .Values.port }}
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: {{ .Values.port }}
